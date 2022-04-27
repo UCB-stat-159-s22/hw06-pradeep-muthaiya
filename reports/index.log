@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/nbclient/client.py", line 1093, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/srv/conda/envs/notebook/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/nbclient/client.py", line 559, in async_execute
+    await self.async_execute_cell(
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/nbclient/client.py", line 854, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "/srv/conda/envs/notebook/lib/python3.9/site-packages/nbclient/client.py", line 756, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# time vector around event
+times = time-tevent
+# zoom in on [-0.2,0.05] seconds around event
+irange = np.nonzero((times >= -0.2) & (times < 0.05))
+# construct a data structure for a csv file:
+dat = [times[irange], strain_H1_whitenbp[irange],strain_L1_whitenbp[irange],
+      template_H1[irange],template_L1[irange] ]
+datcsv = np.array(dat).transpose()
+# make a csv filename, header, and format
+fncsv = eventname+'_data.csv'
+headcsv = eventname+' time-'+str(tevent)+ \
+    ' (s),H1_data_whitened,L1_data_whitened,H1_template_whitened,L1_template_whitened'
+fmtcsv = ",".join(["%10.6f"] * 5)
+np.savetxt(fncsv, datcsv, fmt=fmtcsv, header=headcsv)
+
+print("Wrote whitened data to file {0}".format(fncsv))
+print("You can download this file by clicking 'jupyter' in the top left corner, or using the 'data' menu in Azure.")
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+[0;32m<ipython-input-24-c38c4ed964ee>[0m in [0;36m<module>[0;34m()[0m
+[1;32m      5[0m [0;31m# construct a data structure for a csv file:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      6[0m dat = [times[irange], strain_H1_whitenbp[irange],strain_L1_whitenbp[irange],
+[0;32m----> 7[0;31m       template_H1[irange],template_L1[irange] ]
+[0m[1;32m      8[0m [0mdatcsv[0m [0;34m=[0m [0mnp[0m[0;34m.[0m[0marray[0m[0;34m([0m[0mdat[0m[0;34m)[0m[0;34m.[0m[0mtranspose[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[1;32m      9[0m [0;31m# make a csv filename, header, and format[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mTypeError[0m: 'NoneType' object has no attribute '__getitem__'
+TypeError: 'NoneType' object has no attribute '__getitem__'
+
